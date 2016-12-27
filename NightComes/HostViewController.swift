@@ -34,9 +34,11 @@ class HostViewController: UIViewController {
                 
                 if rc == 1 {
                     self.Label_Instructions.text = "Game is over, Villager wins"
+                    self.ref.child(self.SessionId!).child("Instructions").updateChildValues(["Next": "Game is over, Villager wins"])
                 }
                 else if rc == 2 {
                     self.Label_Instructions.text = "Game is over, Wolf wins"
+                    self.ref.child(self.SessionId!).child("Instructions").updateChildValues(["Next": "Game is over, Wolf wins"])
                 }
                 
                 return

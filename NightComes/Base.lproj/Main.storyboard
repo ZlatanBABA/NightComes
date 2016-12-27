@@ -113,6 +113,7 @@
                     </view>
                     <connections>
                         <outlet property="BTN_Identity" destination="NBD-GE-tfs" id="KuT-qn-Qt6"/>
+                        <outlet property="Label_Instructions" destination="hQM-Xk-cQr" id="kCz-3z-jcy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zTO-lR-DHd" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -15,6 +15,7 @@ class ClientViewController: UIViewController {
     var MyIdentity : String? = nil
     
     @IBOutlet weak var BTN_Identity: UIButton!
+    @IBOutlet weak var Label_Instructions: UILabel!
     
     let ref = FIRDatabase.database().reference()
     
@@ -37,11 +38,21 @@ class ClientViewController: UIViewController {
                     })
             
             DispatchQueue.main.async {
+                
+                // Get instruction
+                self.ref.child(self.SessionId!).child("Instructions").child("Next").observeSingleEvent(of: FIRDataEventType.value, with: { (snapshot) in
+                    
+                    self.Label_Instructions.text = snapshot.value as? String
+                    print("This is :", snapshot.value)
+                    
+                })
+                
                 self.ref.child(self.SessionId!).child("Instructions").observe(FIRDataEventType.childChanged, with: { (snapshot) in
                     
-                    
-                    print("Next instruction is : ", snapshot.value ?? "nil")
-                })            }
+                    self.Label_Instructions.text = snapshot.value as? String
+                }
+                
+            )}
         }
     
         
