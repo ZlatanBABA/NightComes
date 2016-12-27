@@ -70,6 +70,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="ghz-Rm-9hG"/>
                     <connections>
+                        <outlet property="BTN_Create_Game" destination="4rL-aX-roj" id="kUg-wY-oni"/>
                         <outlet property="BTN_Join_Game" destination="7Ck-23-b3E" id="mIf-oo-sWl"/>
                         <outlet property="Label_Info" destination="gch-SE-3hg" id="9nH-gb-KeB"/>
                         <outlet property="TextField_Name" destination="ZYG-Sg-nsB" id="MBd-sV-INi"/>
