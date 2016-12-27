@@ -17,6 +17,7 @@ class HostViewController: UIViewController {
     let ref = FIRDatabase.database().reference()
     
     @IBOutlet weak var BTN_Identity: UIButton!
+    @IBOutlet weak var Label_Instructions: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +28,20 @@ class HostViewController: UIViewController {
             self.MyIdentity = snapshot.value as? String
             
         })
+        
+        self.IsGameEnd { (rc) in
+            if rc > 0 {
+                
+                if rc == 1 {
+                    self.Label_Instructions.text = "Game is over, Villager wins"
+                }
+                else if rc == 2 {
+                    self.Label_Instructions.text = "Game is over, Wolf wins"
+                }
+                
+                return
+            }
+        }
         
     }
     
@@ -54,6 +69,58 @@ class HostViewController: UIViewController {
         }
     }
 
+    // Check if game ends
+    func IsGameEnd(completion: @escaping (Int) -> ()) {
+        
+        var NumOfVil = 0
+        var NumOfWolf = 0
+        var NumOfSaint = 0
+        
+        self.ref.child(self.SessionId!).child("Clients").observeSingleEvent(of: FIRDataEventType.value, with: {
+            
+            snapshot in
+            
+            let enumerator = snapshot.children
+            while let rest = enumerator.nextObject() as? FIRDataSnapshot {
+                
+                if rest.childSnapshot(forPath: "Identity").value as! String == "Villager" {
+                    print("found a vil")
+                    NumOfVil += 1
+                }
+                else if rest.childSnapshot(forPath: "Identity").value as! String == "Wolf" {
+                    print("found a wolf")
+                    NumOfWolf += 1
+                    print("Number of actual wolves : ", NumOfWolf)
+                }
+                else {
+                    print("found a saint")
+                    NumOfSaint += 1
+                }
+            }
+            
+            
+            print("Number of wolves : ", NumOfWolf)
+            
+            if NumOfWolf == 0 {
+                
+                // Game finished, villa wins
+                completion(1)
+            }
+            else if NumOfVil == 0 || NumOfSaint == 0
+            {
+                // Wolf wins
+                completion(2)
+            }
+            else
+            {
+                // Not yet
+                completion(-1)
+            }
+            
+        })
+        
+    }
+    
     /*
     // MARK: - Navigation
 

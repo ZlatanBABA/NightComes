@@ -57,7 +57,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
         let session = self.ref?.childByAutoId()
         session?.child("Instructions").updateChildValues(["Next" : "Waiting for clients"])
-        session?.child("Clients").child("Host").updateChildValues(["Identity" : "nil", "Info" : "nil"])
+        session?.child("Clients").child("Host").updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
         self.SessionId = session?.key
     }
     
@@ -78,7 +78,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 if snapshot.hasChild(self.TextField_RoomID.text!) {
                     self.Label_Info.text = "Waiting for other users"
                     self.BTN_Join_Game.isEnabled = false
-                    self.ref?.child(self.TextField_RoomID.text!).child("Clients").child(self.TextField_Name.text!).updateChildValues(["Identity" : "nil",  "Info" : "nil"])
+                    self.ref?.child(self.TextField_RoomID.text!).child("Clients").child(self.TextField_Name.text!).updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
                 }
                 else
                 {
@@ -105,6 +105,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        self.BTN_Join_Game.isEnabled = true
         
         if segue.identifier == "ShowConfig" {
             let target = segue.destination as! HostConfigViewController

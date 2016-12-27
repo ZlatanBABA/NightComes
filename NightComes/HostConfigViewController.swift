@@ -41,6 +41,7 @@ class HostConfigViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.BTN_READY.isEnabled = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -120,15 +121,17 @@ class HostConfigViewController: UIViewController {
     
     @IBAction func Action_Test(_ sender: Any) {
         
-        self.ref.child(self.SessionId!).child("Clients").child("leo").updateChildValues(["test" : "text"])
-        self.ref.child(self.SessionId!).child("Clients").child("clove").updateChildValues(["test" : "text"])
-        self.ref.child(self.SessionId!).child("Clients").child("eric").updateChildValues(["test" : "text"])
+        self.ref.child(self.SessionId!).child("Clients").child("leo").updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
+        self.ref.child(self.SessionId!).child("Clients").child("clove").updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
+        self.ref.child(self.SessionId!).child("Clients").child("eric").updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
 
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         var rc : Int? = nil
+        
+        self.BTN_READY.isEnabled = true
         
         // Loop throught our members
         for aMember in self.AllMembers {
@@ -169,7 +172,6 @@ class HostConfigViewController: UIViewController {
     }
     
     // Map identity and numbers
-    
     func GetIdentity(index : Int) -> String {
         
         if index == 1 {
@@ -200,16 +202,5 @@ class HostConfigViewController: UIViewController {
     
 }
 
-//        self.ref.child(self.SessionId!).child("Clients").observeSingleEvent(of: FIRDataEventType.value, with: {
-//
-//            snapshot in
-//
-//            let enumerator = snapshot.children
-//            while let rest = enumerator.nextObject() as? FIRDataSnapshot {
-//
-//                print(rest.key)
-//
-//            }
-//
-//        })
+
 

@@ -24,16 +24,6 @@ class ClientViewController: UIViewController {
         // Do any additional setup after loading the view.
         print("My identity is : ", self.MyIdentity ?? "nil")
         
-        
-//        self.ref.observeSingleEvent(of: FIRDataEventType.childRemoved, with: { (snapshot) in
-//            
-//            if snapshot.key == self.SessionId {
-//                self.navigationController?.popToRootViewController(animated: true)
-//                return
-//            }
-//            
-//        })
-        
         DispatchQueue.global(qos: .background).async {
             print("This is run on the background queue")
             
@@ -73,7 +63,7 @@ class ClientViewController: UIViewController {
         }
         
     }
-
+    
     /*
     // MARK: - Navigation
 
