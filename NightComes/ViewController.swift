@@ -20,6 +20,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     // Button
     @IBOutlet weak var BTN_Join_Game: UIButton!
+    @IBOutlet weak var BTN_Create_Game: UIButton!
     
     var ref : FIRDatabaseReference? = nil
 
@@ -34,6 +35,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
         self.Label_Info.text = ""
         self.BTN_Join_Game.isEnabled = true
+        self.BTN_Create_Game.isEnabled = true
         self.TextField_Name.text = ""
         self.TextField_RoomID.text = ""
         
@@ -73,6 +75,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 if snapshot.hasChild(self.TextField_RoomID.text!) {
                     self.Label_Info.text = "Waiting for other users"
                     self.BTN_Join_Game.isEnabled = false
+                    self.BTN_Create_Game.isEnabled = false
                     
                     if snapshot.childSnapshot(forPath: self.TextField_RoomID.text!).childSnapshot(forPath: "Clients").hasChild(self.TextField_Name.text!) == false {
                         self.ref?.child(self.TextField_RoomID.text!).child("Clients").child(self.TextField_Name.text!).updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
@@ -111,6 +114,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         self.BTN_Join_Game.isEnabled = true
+        self.BTN_Create_Game.isEnabled = true
         
         if segue.identifier == "ShowClientView" {
             let target = segue.destination as! ClientViewController
