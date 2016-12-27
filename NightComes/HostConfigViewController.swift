@@ -51,7 +51,7 @@ class HostConfigViewController: UIViewController {
     
     // Back button event handler
     override func willMove(toParentViewController parent: UIViewController?) {
-        if parent == nil {
+        if parent == nil && self.SessionId != nil {
             self.ref.child(self.SessionId!).removeValue()
         }
     }
@@ -60,11 +60,17 @@ class HostConfigViewController: UIViewController {
         
         var rc : Int = 0
         
+        let session = self.ref.childByAutoId()
+        session.child("Instructions").updateChildValues(["Next" : "Waiting for clients"])
+        session.child("Clients").child("Host").updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
+        self.SessionId = session.key
+        
         self.BTN_READY.isEnabled = false
         
         self.Label_SessionId.text = self.SessionId
         
         // Get totally number of clients
+        self.totoal.removeAll()
         rc = Int(self.LBL_Villager.text!)!
         
         while rc != 0 {
@@ -103,8 +109,10 @@ class HostConfigViewController: UIViewController {
         
         print("total is : ", self.totoal.count)
         
+        self.AllMembers.removeAll()
         self.AllMembers.append("Host")
         
+        self.counter = 1
         self.ref.child(self.SessionId!).child("Clients").observe(FIRDataEventType.childAdded, with: { (snapshot) in
             
             if snapshot.key != "Host" {
@@ -121,10 +129,12 @@ class HostConfigViewController: UIViewController {
     
     @IBAction func Action_Test(_ sender: Any) {
         
-        self.ref.child(self.SessionId!).child("Clients").child("leo").updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
-        self.ref.child(self.SessionId!).child("Clients").child("clove").updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
-        self.ref.child(self.SessionId!).child("Clients").child("eric").updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
-
+        if self.SessionId != nil {
+            self.ref.child(self.SessionId!).child("Clients").child("leo").updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
+            self.ref.child(self.SessionId!).child("Clients").child("clove").updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
+            self.ref.child(self.SessionId!).child("Clients").child("eric").updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
+        }
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -10,9 +10,7 @@ import UIKit
 import FirebaseDatabase
 
 class ViewController: UIViewController, UITextFieldDelegate {
-    
-    var SessionId : String? = nil
-    
+        
     // Text fields
     @IBOutlet weak var TextField_RoomID: UITextField!
     @IBOutlet weak var TextField_Name: UITextField!
@@ -55,10 +53,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     // Button Actions
     @IBAction func Action_Create_Game(_ sender: Any) {
         
-        let session = self.ref?.childByAutoId()
-        session?.child("Instructions").updateChildValues(["Next" : "Waiting for clients"])
-        session?.child("Clients").child("Host").updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
-        self.SessionId = session?.key
+
     }
     
     @IBAction func Action_Join_Game(_ sender: Any) {
@@ -78,7 +73,16 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 if snapshot.hasChild(self.TextField_RoomID.text!) {
                     self.Label_Info.text = "Waiting for other users"
                     self.BTN_Join_Game.isEnabled = false
-                    self.ref?.child(self.TextField_RoomID.text!).child("Clients").child(self.TextField_Name.text!).updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
+                    
+                    if snapshot.childSnapshot(forPath: self.TextField_RoomID.text!).childSnapshot(forPath: "Clients").hasChild(self.TextField_Name.text!) == false {
+                        self.ref?.child(self.TextField_RoomID.text!).child("Clients").child(self.TextField_Name.text!).updateChildValues(["Identity" : "nil", "Alive" : "yes", "Info" : "nil"])
+                    }
+                    else
+                    {
+                        self.performSegue(withIdentifier: "ShowClientView", sender: nil)
+                        return
+                    }
+                    
                 }
                 else
                 {
@@ -108,12 +112,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
         self.BTN_Join_Game.isEnabled = true
         
-        if segue.identifier == "ShowConfig" {
-            let target = segue.destination as! HostConfigViewController
-            
-            target.SessionId = self.SessionId
-        }
-        else if segue.identifier == "ShowClientView" {
+        if segue.identifier == "ShowClientView" {
             let target = segue.destination as! ClientViewController
             
             target.SessionId = self.TextField_RoomID.text
